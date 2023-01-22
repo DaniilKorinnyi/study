@@ -8,11 +8,11 @@ class EqualSignContext:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_val:
             print(f"Error occured: {exc_val}")
-            print(self.sign * 10)
         return True
 
-with EqualSignContext():
+a = EqualSignContext()
+with a:
     print("This code will be executed")
     x = 1 / 0
     print("This code will not be executed")
-
+print(a.sign * 10)
