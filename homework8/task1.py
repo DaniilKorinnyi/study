@@ -2,9 +2,9 @@ from datetime import datetime
 
 
 def decorator(func):
-  def wrap():
+  def wrap(*args, **kwargs):
     print(func.__name__ + " was called at " + str(datetime.now()))
-    return func()
+    return func(*args, **kwargs)
   return wrap
 @decorator
 def func1():
