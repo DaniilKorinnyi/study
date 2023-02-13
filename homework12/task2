@@ -1,0 +1,5 @@
+INSERT INTO users (first_name, last_name, age) VALUES ("John", "Doe", 30);
+INSERT INTO users (first_name, last_name, age) VALUES ("Jane", "Wilson", 28);
+INSERT INTO users (first_name, last_name, age) VALUES ("Jack", "Smith", 19);
+INSERT INTO users (first_name, last_name, age) VALUES ("Alice", "Johnson", 32);
+INSERT INTO users (first_name, last_name, age) VALUES ("Bob", "Williams", 40);
