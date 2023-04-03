@@ -93,3 +93,4 @@ def other():
             <li><a href="/params">Other</a></li>
         </ul>
 '''
+
