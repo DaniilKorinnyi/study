@@ -5,7 +5,9 @@
     <title>General</title>
 </head>
 <body>
-  <h1>Hello!</h1>
+    {% if current %}
+  <h1>Hello {{current}}!</h1>
+        {% endif %}
           <p>Below are links to other pages:</p>
           <ul>
               <li><a href="/users">List of users</a></li>

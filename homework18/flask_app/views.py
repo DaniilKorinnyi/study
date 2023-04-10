@@ -14,7 +14,11 @@ def users():
              "Molly", "Nancy", "Oliver", "Pam", "Quinn", "Rachel", "Steve", "Tom", "Uma", "Victor", "Wendy", "Xander",
              "Yara", "Zara"]
     users = random.sample(name_list, random.randint(1, len(name_list)))
-    return render_template('users.html', users=users)
+    current = session.get('user')
+    if current:
+        return render_template('users.html', users=users)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/books')
@@ -27,20 +31,36 @@ def books():
              "The Adventures of Sherlock Holmes", "Alice's Adventures in Wonderland", "The War of the Worlds",
              "Treasure Island"]
     books = random.sample(book_list, random.randint(1, len(book_list)))
-    return render_template('books.html', books=books)
+    current = session.get('user')
+    if current:
+        return render_template('books.html', books=books)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/users/<int:id>')
 def get_user(id):
-    return render_template('usersid.html', id=id)
+    current = session.get('user')
+    if current:
+        return render_template('usersid.html', id=id)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/books/<title>')
 def get_book(title):
     transformed_title = title.capitalize()
-    return render_template('bookstitle.html', title=transformed_title)
+    current = session.get('user')
+    if current:
+        return render_template('bookstitle.html', title=transformed_title)
+    else:
+        return redirect(url_for('login'))
 
 @app.route('/params')
 def params():
-    return render_template('params.html', params=request.args)
+    current = session.get('user')
+    if current:
+        return render_template('params.html', params=request.args)
+    else:
+        return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -65,15 +85,21 @@ def internal_server_error(e):
 
 @app.route('/general')
 def other():
-    return render_template('general.html')
+    current = session.get('user')
+    if current:
+        return render_template('general.html', current=current)
+    else:
+        return redirect(url_for('login'))
+    # return render_template('general.html')
 
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    session.pop('username', None)
+    session.pop('user', None)
     return redirect('/login')
 
 
 @app.route('/')
 def base():
     return render_template('base.html')
+
