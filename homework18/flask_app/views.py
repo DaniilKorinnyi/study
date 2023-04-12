@@ -1,8 +1,12 @@
-from flask_app import app
-from flask import Flask, redirect, url_for, render_template, request, abort, session
+from flask_app import app, db
+import os
+import jwt
+from flask import Flask, redirect, url_for, render_template, request, abort, session, jsonify
 import random
+from .models import User, Book, Purchase
 
-app.secret_key = b'secret'
+app.secret_key = os.getenv('SECRET_KEY')
+
 @app.route('/hello')
 def hello():
     app.logger.info('Request received for hello endpoint.')
@@ -19,6 +23,7 @@ def users():
         return render_template('users.html', users=users)
     else:
         return redirect(url_for('login'))
+
 
 
 @app.route('/books')
