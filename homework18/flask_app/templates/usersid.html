@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<title>User information</title>
+</head>
+<body>
+	{% if id % 2 == 0 %}
+		<h1>User with ID {{ id }} exists</h1>
+	{% else %}
+		<h1>404 Not Found</h1>
+		<p>The requested user could not be found.</p>
+		<a href="{{ url_for('logout') }}">Logout</a>
+	{% endif %}
+	<a href="/logout">Logout</a>
+</body>
+</html>

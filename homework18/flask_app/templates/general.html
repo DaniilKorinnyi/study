@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>General</title>
+</head>
+<body>
+    {% if current %}
+  <h1>Hello {{current}}!</h1>
+        {% endif %}
+          <p>Below are links to other pages:</p>
+          <ul>
+              <li><a href="/users">List of users</a></li>
+              <li><a href="/books">List of books</a></li>
+              <li><a href="/params">Other</a></li>
+              <li><a href="/logout">Logout</a></li>
+          </ul>
+</body>
+</html>

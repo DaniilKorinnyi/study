@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>List of users</title>
+</head>
+<body>
+	<h1>List of users</h1>
+		<ul>
+			{% for name in users %}
+				<li>{{name}}</li>
+			{% endfor %}
+			<a href="/logout">Logout</a>
+		</ul>
+</body>
+</html>
