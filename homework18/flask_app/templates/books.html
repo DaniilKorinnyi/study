@@ -8,7 +8,7 @@
 	<h1>List of books</h1>
 	<ul>
 		{% for book in books %}
-			<li>{{ book }}</li>
+			<li> {{ book.title }}, {{ book.author }}, {{ book.price }} </li>
 		{% endfor %}
 		<a href="/logout">Logout</a>
 	</ul>

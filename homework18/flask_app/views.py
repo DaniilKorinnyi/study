@@ -1,67 +1,116 @@
-from flask_app import app
-from flask import Flask, redirect, url_for, render_template, request, abort, session
-import random
+from flask_app import app, db
+import os
+from flask import Flask, redirect, url_for, render_template, request, abort, session, jsonify
+from .models import User, Book, Purchase
 
-app.secret_key = b'secret'
-@app.route('/hello')
-def hello():
-    app.logger.info('Request received for hello endpoint.')
-    return 'Hello, world!'
+app.secret_key = os.getenv('SECRET_KEY')
+
 
 @app.route('/users')
 def users():
-    name_list = ["Alice", "Bob", "Charlie", "Dave", "Eve", "Frank", "Grace", "Heidi", "Ivan", "Jack", "Karen", "Liam",
-             "Molly", "Nancy", "Oliver", "Pam", "Quinn", "Rachel", "Steve", "Tom", "Uma", "Victor", "Wendy", "Xander",
-             "Yara", "Zara"]
-    users = random.sample(name_list, random.randint(1, len(name_list)))
+    users = User.query.all()
     current = session.get('user')
     if current:
         return render_template('users.html', users=users)
     else:
         return redirect(url_for('login'))
 
+@app.route('/users', methods=['POST'])
+def create_user():
+    user = User(
+        name=request.json.get('name'),
+        age=request.json.get('age')
+    )
+    db.session.add(user)
+    db.session.commit()
+    return 'User created', 201
+
+@app.route('/users/<int:id>')
+def get_user(id):
+    users = User.query.get(id)
+    current = session.get('user')
+    if current:
+        return render_template('usersid.html', users=users, id=id)
+    else:
+        return redirect(url_for('login'))
+
+# _______________________________________________________________________
 
 @app.route('/books')
 def books():
-    book_list = ["The Great Gatsby", "To Kill a Mockingbird", "1984", "The Catcher in the Rye", "Animal Farm",
-             "Pride and Prejudice", "Lord of the Flies", "The Hobbit", "The Lord of the Rings",
-             "The Hitchhiker's Guide to the Galaxy", "The Da Vinci Code", "Harry Potter and the Philosopher's Stone",
-             "The Hunger Games", "The Diary of a Young Girl", "The Alchemist", "One Hundred Years of Solitude",
-             "Brave New World", "Fahrenheit 451", "The Picture of Dorian Gray", "Dracula", "Frankenstein",
-             "The Adventures of Sherlock Holmes", "Alice's Adventures in Wonderland", "The War of the Worlds",
-             "Treasure Island"]
-    books = random.sample(book_list, random.randint(1, len(book_list)))
+    books = Book.query.all()
     current = session.get('user')
     if current:
         return render_template('books.html', books=books)
     else:
         return redirect(url_for('login'))
+@app.route('/books', methods=['POST'])
+def create_book():
+    book = Book(
+        title=request.json.get('title'),
+        author=request.json.get('author'),
+        price=request.json.get('price')
+    )
+    db.session.add(book)
+    db.session.commit()
+    return 'Book added', 201
 
-@app.route('/users/<int:id>')
-def get_user(id):
+
+@app.route('/books/<int:id>')
+def get_book(id):
+    books = Book.query.get(id)
     current = session.get('user')
     if current:
-        return render_template('usersid.html', id=id)
+        return render_template('booksid.html', books=books, id=id)
     else:
         return redirect(url_for('login'))
 
-@app.route('/books/<title>')
-def get_book(title):
-    transformed_title = title.capitalize()
+
+# _______________________________________________________________________
+
+
+@app.route('/purchases')
+def purchases():
+    purchases = Purchase.query.all()
     current = session.get('user')
     if current:
-        return render_template('bookstitle.html', title=transformed_title)
+        return render_template('purchases.html', purchases=purchases)
+    else:
+        return 404
+
+@app.route('/purchases', methods=['POST'])
+def create_purchases():
+    purchase = Purchase(
+    user_id=request.json.get('user_id'),
+    book_id=request.json.get('book_id'),
+    total_price=request.json.get('total_price')
+    )
+    db.session.add(purchase)
+    db.session.commit()
+    return 'Purchase added', 201
+
+@app.route('/purchases/<int:id>')
+def purchase_id(id):
+    purchases = Purchase.query.get(id)
+    current = session.get('user')
+    if current:
+        return render_template('purchasesid.html', purchases=purchases, id=id)
     else:
         return redirect(url_for('login'))
 
-@app.route('/params')
-def params():
+# _______________________________________________________________________
+
+@app.route('/')
+def base():
+    return render_template('base.html')
+
+@app.route('/general')
+def other():
     current = session.get('user')
     if current:
-        return render_template('params.html', params=request.args)
+        return render_template('general.html', current=current)
     else:
         return redirect(url_for('login'))
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -75,6 +124,19 @@ def login():
     else:
         abort(400, 'Missing username or password')
 
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    session.pop('user', None)
+    return redirect('/login')
+
+@app.route('/params')
+def params():
+    current = session.get('user')
+    if current:
+        return render_template('params.html', params=request.args)
+    else:
+        return redirect(url_for('login'))
+
 @app.errorhandler(404)
 def page_not_found(e):
     return "<h1>404 Not Found</h1><p>The requested page could not be found.</p>", 404
@@ -83,23 +145,6 @@ def page_not_found(e):
 def internal_server_error(e):
     return "<h1>500 Internal Server Error</h1><p>An error occurred while processing the request.</p>", 500
 
-@app.route('/general')
-def other():
-    current = session.get('user')
-    if current:
-        return render_template('general.html', current=current)
-    else:
-        return redirect(url_for('login'))
-    # return render_template('general.html')
 
 
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-    session.pop('user', None)
-    return redirect('/login')
-
-
-@app.route('/')
-def base():
-    return render_template('base.html')
 

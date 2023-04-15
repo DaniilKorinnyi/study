@@ -5,8 +5,8 @@
 	<title>User information</title>
 </head>
 <body>
-	{% if id % 2 == 0 %}
-		<h1>User with ID {{ id }} exists</h1>
+	{% if id in users %}
+		<h2>{{ users.name }} with ID {{ users.id }}, age: {{ users.age }} </h2>
 	{% else %}
 		<h1>404 Not Found</h1>
 		<p>The requested user could not be found.</p>
