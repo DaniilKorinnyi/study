@@ -27,10 +27,12 @@ def create_user():
 
 @app.route('/users/<int:id>')
 def get_user(id):
-    users = User.query.get(id)
+    user = User.query.get(id)
+    if not user:
+        return abort(404)
     current = session.get('user')
     if current:
-        return render_template('usersid.html', users=users, id=id)
+        return render_template('usersid.html', user=user, id=id)
     else:
         return redirect(url_for('login'))
 
@@ -58,12 +60,14 @@ def create_book():
 
 @app.route('/books/<int:id>')
 def get_book(id):
-    books = Book.query.get(id)
+    book = Book.query.get(id)
+    if not book:
+        return abort(404)
     current = session.get('user')
     if current:
-        return render_template('booksid.html', books=books, id=id)
+       return render_template('booksid.html', book=book, id=id)
     else:
-        return redirect(url_for('login'))
+       return redirect(url_for('login'))
 
 
 # _______________________________________________________________________
@@ -92,6 +96,8 @@ def create_purchases():
 @app.route('/purchases/<int:id>')
 def purchase_id(id):
     purchases = Purchase.query.get(id)
+    if not purchases:
+        return abort(404)
     current = session.get('user')
     if current:
         return render_template('purchasesid.html', purchases=purchases, id=id)

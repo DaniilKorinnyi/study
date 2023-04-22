@@ -5,9 +5,7 @@
 	<title>Book information</title>
 </head>
 <body>
-	{% if id in books %}
-		<h2>{{ books.id }}."{{ books.title }}", author: {{ books.author }}. Price: {{ books.price }} grn.</h2>
-	{% endif %}
+		<h2>{{ book.id }}."{{ book.title }}", author: {{ book.author }}. Price: {{ book.price }} grn.</h2>
 	<a href="/logout">Logout</a>
 </body>
 </html>

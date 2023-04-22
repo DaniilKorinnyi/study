@@ -5,13 +5,7 @@
 	<title>User information</title>
 </head>
 <body>
-	{% if id in users %}
-		<h2>{{ users.name }} with ID {{ users.id }}, age: {{ users.age }} </h2>
-	{% else %}
-		<h1>404 Not Found</h1>
-		<p>The requested user could not be found.</p>
-		<a href="{{ url_for('logout') }}">Logout</a>
-	{% endif %}
+		<h2> {{ user.name }} with ID {{ id }}, age: {{ user.age }} </h2>
 	<a href="/logout">Logout</a>
 </body>
 </html>

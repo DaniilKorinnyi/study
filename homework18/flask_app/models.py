@@ -8,8 +8,6 @@ class User(db.Model):
     def __repr__(self):
         return f'User #{self.id}'
 
-    def __iter__(self):
-        return iter([self.id, self.name, self.age])
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -17,8 +15,6 @@ class Book(db.Model):
     author = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Float, nullable=False)
 
-    def __iter__(self):
-        return iter([self.id, self.title, self.author, self.price])
 
 
 class Purchase(db.Model):
@@ -26,6 +22,3 @@ class Purchase(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
-
-    def __iter__(self):
-        return iter([self.id, self.user_id, self.book_id, self.total_price])

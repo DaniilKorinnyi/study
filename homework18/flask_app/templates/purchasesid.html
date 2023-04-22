@@ -5,9 +5,7 @@
 	<title>Purchase information</title>
 </head>
 <body>
-	{% if id in purchases %}
 		<h2>Purchase id-{{ purchases.id }}: user -{{ purchases.user_id }}, book id -{{ purchases.book_id}}. Total price {{ purchases.total_price}} grn</h2>
-	{% endif %}
 	<a href="/logout">Logout</a>
 </body>
 </html>
