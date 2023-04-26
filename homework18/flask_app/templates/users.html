@@ -8,9 +8,10 @@
 	<h1>List of users</h1>
 		<ul>
 			{% for name in users %}
-				<li>{{name}}</li>
+				<li>{{ name.name }}: age-{{ name.age }}, id-{{ name.id }}</li>
 			{% endfor %}
 			<a href="/logout">Logout</a>
 		</ul>
 </body>
 </html>
+
