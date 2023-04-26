@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from purchase.models import Purchase
+
+
+@admin.register(Purchase)
+class Purchase(admin.ModelAdmin):
+    pass
+
