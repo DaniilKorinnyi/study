@@ -7,18 +7,36 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import UserSerializer
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
+import django_filters
+
+
+
 
 class UserPagination(PageNumberPagination):
     page_size = 10
 
+class UserFilter(django_filters.FilterSet):
+    class Meta:
+        model = User
+        fields = {
+            'first_name': ['contains'],
+            'age': ['gte', 'lte', 'gt', 'lt', 'exact']
+        }
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = UserPagination
     page_size_query_param = 'page_size'
     max_page_size = 10
-    ordering_fields = ['last_name', 'first_name']
-    search_fields = ['age']
+    filterset_class = UserFilter
+    search_fields = ['first_name']
+    ordering_fields = ['age', 'id']
+    filter_backends = [
+        django_filters.rest_framework.DjangoFilterBackend,
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+
 
 
 # class UserListView(ListView):
@@ -34,10 +52,10 @@ class UserViewSet(ModelViewSet):
 #     template_name = 'user_form.html'
 #     form_class = UserForm
 
-def simple(request):
-    return HttpResponse('Test')
+# def simple(request):
+#     return HttpResponse('Test')
 
-def users(request):
-    users = User.objects.all()
-    data = list(users.values())
-    return JsonResponse(data, safe=False)
+# def users(request):
+#     users = User.objects.all()
+#     data = list(users.values())
+#     return JsonResponse(data, safe=False)
