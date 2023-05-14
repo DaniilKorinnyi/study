@@ -9,25 +9,25 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
 import django_filters
 
-
-
-
-class UserPagination(PageNumberPagination):
-    page_size = 10
-
 class UserFilter(django_filters.FilterSet):
     class Meta:
         model = User
-        fields = {
-            'first_name': ['contains'],
-            'age': ['gte', 'lte', 'gt', 'lt', 'exact']
-        }
+        fields = ['first_name', 'age']
+        # {
+        #     'first_name': ['contains'],
+        #     'age': ['gte', 'lte', 'gt', 'lt', 'exact']
+        # }
+
+class UserPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 10
+
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = UserPagination
     page_size_query_param = 'page_size'
-    max_page_size = 10
     filterset_class = UserFilter
     search_fields = ['first_name']
     ordering_fields = ['age', 'id']
